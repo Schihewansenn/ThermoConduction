@@ -8,6 +8,8 @@
 
 本文档包含**项目框架**，**原理讲解**，**使用说明**三部分
 
+原理部分有大量公式，使用 Latex 语法写成（一般的Markdown 编辑器均可正确编译显示，但是 Github 的不行）
+
 有任何疑问欢迎邮箱联系 xiewansen@outlook.com
 
 **Framework of Projects**
