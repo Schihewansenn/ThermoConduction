@@ -8,7 +8,7 @@
 
 本文档包含**项目框架**，**原理讲解**，**使用说明**三部分
 
-原理部分有大量公式，使用 Latex 语法写成（一般的Markdown 编辑器均可正确编译显示，但是 Github 的不行）
+原理部分有大量公式，使用 Latex 语法写成（一般的Markdown 编辑器均可正确编译显示，但是 Github 的不行），您可以查看 **README.pdf** / **README.html** 的原理部分。
 
 有任何疑问欢迎邮箱联系 xiewansen@outlook.com
 
@@ -65,15 +65,15 @@
 
 则方程为：
 
-```math
+$$
 \frac{\partial T}{\partial t} = \alpha \frac{\partial^2}{\partial x^2} T
-```
+$$
 
 离散化后(i为空间角标，w为时间角标，上限值为n)
 
-```math
+$$
 \frac{T_{i,w+1} - T_{i,w}}{\Delta t} = \alpha \frac{(T_{i+1,w} - T_{i,w}) - (T_{i,w} - T_{i-1,w})}{(\Delta x)^2}
-```
+$$
 
 设定空间微元 $\Delta x = 0.0001 m$ 与时间微元 $\Delta t = 0.0001 s$ (具体数值可由人为给定，若后续计算不收敛，请尝试调大 $\Delta x$ 并减小 $\Delta t$，二者越小计算结果越精确)
 
@@ -85,15 +85,15 @@ $$T_{i=n, w} = T_2 = g_1(w)$$
 
 通过设定初始条件获得
 
-```math
+$$
 T_{i, w=0} = T_i = h_1(i)
-```
+$$
 
 通过欧拉前项法求解偏微分方程
 
-```math
+$$
 T_{i,w+1} = \alpha \frac{T_{i+1,w} + T_{i-1,w} - 2T_{i,w}}{(\Delta x)^2} \Delta t + T_{i,w}
-```
+$$
 
 计算每个点的温度值并绘制图像
 
@@ -103,9 +103,9 @@ T_{i,w+1} = \alpha \frac{T_{i+1,w} + T_{i-1,w} - 2T_{i,w}}{(\Delta x)^2} \Delta 
 
 在直角坐标系中，方程为：
 
-```math
+$$
 \frac{\partial T}{\partial t} = \alpha (\frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2} + \frac{\partial^2}{\partial z^2}) T
-```
+$$
 
 离散化后(i, j, k 为空间角标，w为时间角标，上限值为n)
 
@@ -127,9 +127,9 @@ $$T_{i+1,j,k,w} = T_2 = g_3(i,j,k,w)|_{surface}$$
 
 通过设定初始条件获得
 
-```math
+$$
 T_{i,j,k,w=0} = T_0 = h_3(i,j,k)
-```
+$$
 
 通过欧拉中项法求解偏微分方程
 
