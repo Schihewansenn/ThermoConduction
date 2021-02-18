@@ -6,7 +6,11 @@
 
 需要安装 numpy, matplotlib, seaborn 第三方库
 
-**Frameworks**
+本文档包含**项目框架**，**原理讲解**，**使用说明**三部分
+
+有任何疑问欢迎邮箱联系 xiewansen@outlook.com
+
+**Framework of Projects**
 + README.md
 + 1D_Dynamics
     + **dynamic_Thermo_Conduction.py**
@@ -32,6 +36,121 @@
     + Setup
         + readme.txt
         + setup.txt
+
+---
+
+## 原理讲解
+
+##### 这是固体中的传热方程
+
+```math
+\frac{\partial T}{\partial t} = \alpha \nabla^2 T + \frac{\dot q}{k}
+```
+
+|符号|物理量|单位|
+|---|---|---|
+|$k$|热导率|$W \cdot m^{-2} \cdot K^{-1}$|
+|$\dot q$|产热率|$W \cdot m^{-3}$|
+|$T$|温度|$K$|
+|$t$|时间|$s$|
+|$\alpha$|热扩散系数|$K \cdot s^{-1}$|
+
+计算过程中使用三维直角坐标系，欧拉（控制体）观点，衡算正交网格边界的热通量，离散计算散度。
+
+##### 在一维空间中
+
+假设物体内部不产生热且具有各向同性
+
+则方程为：
+
+```math
+\frac{\partial T}{\partial t} = \alpha \frac{\partial^2}{\partial x^2} T
+```
+
+离散化后(i为空间角标，w为时间角标，上限值为n)
+
+```math
+\frac{T_{i,w+1} - T_{i,w}}{\Delta t} = \alpha \frac{(T_{i+1,w} - T_{i,w}) - (T_{i,w} - T_{i-1,w})}{(\Delta x)^2}
+```
+
+设定空间微元 $\Delta x = 0.0001 m$ 与时间微元 $\Delta t = 0.0001 s$ (具体数值可由人为给定，若后续计算不收敛，请尝试调大 $\Delta x$ 并减小 $\Delta t$，二者越小计算结果越精确)
+
+通过设定边界条件获得
+
+$$T_{i=0, w} = T_1 = f_1(w)$$
+
+$$T_{i=n, w} = T_2 = g_1(w)$$
+
+通过设定初始条件获得
+
+```math
+T_{i, w=0} = T_i = h_1(i)
+```
+
+通过欧拉前项法求解偏微分方程
+
+```math
+T_{i,w+1} = \alpha \frac{T_{i+1,w} + T_{i-1,w} - 2T_{i,w}}{(\Delta x)^2} \Delta t + T_{i,w}
+```
+
+计算每个点的温度值并绘制图像
+
+##### 在三维空间中
+
+假设物体内部不产生热且具有各向同性
+
+在直角坐标系中，方程为：
+
+```math
+\frac{\partial T}{\partial t} = \alpha (\frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2} + \frac{\partial^2}{\partial z^2}) T
+```
+
+离散化后(i, j, k 为空间角标，w为时间角标，上限值为n)
+
+```math
+\begin{aligned}
+\frac{T_{i,j,k,w+1} - T_{i,j,k,w}}{\alpha \Delta t}
+= \frac{T_{i+1,j,k,w} + T_{i-1,j,k,w} - 2T_{i,j,k,w}}{(\Delta x)^2}\\
++ \frac{T_{i,j+1,k,w} + T_{i,j-1,k,w} - 2T_{i,j,k,w}}{(\Delta y)^2}\\
++ \frac{T_{i,j,k+1,w} + T_{i,j,k-1,w} - 2T_{i,j,k,w}}{(\Delta z)^2}\\
+\end{aligned}
+```
+
+设定空间微元 $\Delta x = \Delta y = \Delta z = 0.0001 m$ 与时间微元 $\Delta t = 0.0001 s$ (具体数值可由人为给定，若后续计算不收敛，请尝试调大 $\Delta x$ 并减小 $\Delta t$，二者越小计算结果越精确)
+
+通过设定边界条件获得
+
+$$T_{i,j,k,w} = T_1 = f_3(i,j,k,w)|_{surface}$$
+$$T_{i+1,j,k,w} = T_2 = g_3(i,j,k,w)|_{surface}$$
+
+通过设定初始条件获得
+
+```math
+T_{i,j,k,w=0} = T_0 = h_3(i,j,k)
+```
+
+通过欧拉中项法求解偏微分方程
+
+```math
+\begin{aligned}
+T_{i,j,k,w+1}
+= \frac{\alpha \Delta t}{\Delta x^2}(T_{i+1,j,k,w} + T_{i-1,j,k,w}+ T_{i,j+1,k,w}\\
++ T_{i,j,k+1,w} + T_{i,j,k-1,w} + T_{i,j-1,k,w}\\
+- 6T_{i,j,k,w}) + T_{i,j,k,w}\\
+\end{aligned}
+```
+
+计算每个点的温度值
+
+由于工作量巨大，这个程序被分成了三个部分，用 numpy 数组进行交互。
+
+构建结构的 **shapeGenerate.py**
+传热计算（仿真）的 **3D_5.py**
+结果可视化 **visualization.py**
+
+详细内容请看下面的使用说明
+
+---
 
 ## 1D-传热仿真
 
